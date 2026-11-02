@@ -13,6 +13,22 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(AIException.class)
+    public ResponseEntity<Map<String, Object>> handleAIException(
+            AIException ex) {
+
+        Map<String, Object> response = Map.of(
+                "timestamp", LocalDateTime.now(),
+                "status", HttpStatus.SERVICE_UNAVAILABLE.value(),
+                "error", "AI_SERVICE_UNAVAILABLE",
+                "message", ex.getMessage()
+        );
+
+        return ResponseEntity
+                .status(HttpStatus.SERVICE_UNAVAILABLE)
+                .body(response);
+    }
+
     @ExceptionHandler(InventoryServiceException.class)
     public ResponseEntity<Map<String, Object>> handleInventoryServiceException(
             InventoryServiceException exception,
